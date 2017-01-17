@@ -17,10 +17,11 @@ export default function mitt(all) {
 		/** Register an event handler for the given type.
 		 *	@param {String} type		Type of event to listen for, or `"*"` for all events
 		 *	@param {Function} handler	Function to call in response to the given event
+		 *	@param {Boolean} dedupe		Whether to drop duplicate type-handler registrations
 		 *	@memberof mitt
 		 */
 		on(type, handler) {
-			list(type).push(handler);
+			if (!dedupe || !mitt.has(type, handler)) list(type).push(handler);
 		},
 
 		/** Remove an event handler for the given type.
@@ -32,6 +33,15 @@ export default function mitt(all) {
 			let e = list(type),
 				i = e.indexOf(handler);
 			if (~i) e.splice(i, 1);
+		},
+
+		/** Check if an event handler has been registered for the given type.
+		 *	@param {String} type 		Type of event to unregister `handler` from, or `"*"`
+		 *	@param {Function} handler	Handler function to check
+		 *	@memberof mitt
+		 */
+		has(type, handler) {
+			return !!~list(type).indexOf(handler);
 		},
 
 		/** Invoke all handlers for the given type.
