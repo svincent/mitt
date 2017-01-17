@@ -52,6 +52,14 @@ describe('mitt', () => {
 				expect(events).to.have.property('bar').that.deep.equals([foo]);
 				expect(events).to.have.property('baz:bat!').that.deep.equals([foo]);
 			});
+
+			it('should drop duplicate type-halder registrations', () => {
+				let foo = () => {};
+				inst.on('foo', foo, true);
+				inst.on('foo', foo, true);
+
+				expect(events).to.have.property('foo').that.deep.equals([foo]);
+			});
 		});
 
 		describe('off()', () => {

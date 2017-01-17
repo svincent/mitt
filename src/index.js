@@ -17,11 +17,11 @@ export default function mitt(all) {
 		/** Register an event handler for the given type.
 		 *	@param {String} type		Type of event to listen for, or `"*"` for all events
 		 *	@param {Function} handler	Function to call in response to the given event
-		 *	@param {Boolean} dedupe		Whether to drop duplicate type-handler registrations
+		 *	@param {Boolean} dropDupe	Whether or not this type-handler should be dropped if it has already been registered
 		 *	@memberof mitt
 		 */
-		on(type, handler, dedupe) {
-			if (!dedupe || ~list(type).indexOf(handler)) list(type).push(handler);
+		on(type, handler, dropDupe) {
+			if (!dropDupe || !~list(type).indexOf(handler)) list(type).push(handler);
 		},
 
 		/** Remove an event handler for the given type.
